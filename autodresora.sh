@@ -224,27 +224,7 @@ print_status "${YELLOW}" "Setting up operator..."
 read -p "Enter Operator ETH Wallet Address: " OP_ETH
 
 print_status "${YELLOW}" "Updating drosera.toml..."
-TOML_FILE="$HOME/my-drosera-trap/drosera.toml"
-TEMP_FILE="$HOME/my-drosera-trap/drosera.toml.tmp"
-
-# If drosera.toml doesn't exist, create it with the required entries
-if [ ! -f "$TOML_FILE" ]; then
-    cat << EOF > "$TOML_FILE"
-private_trap = true
-whitelist = ["$OP_ETH"]
-EOF
-else
-    # Remove existing private_trap and whitelist entries to avoid duplicates
-    grep -vE '^(private_trap|whitelist)\s*=' "$TOML_FILE" > "$TEMP_FILE"
-    # Append new entries
-    cat << EOF >> "$TEMP_FILE"
-private_trap = true
-whitelist = ["$OP_ETH"]
-EOF
-    # Replace original file with updated one
-    mv "$TEMP_FILE" "$TOML_FILE"
-fi
-check_error "Failed to update drosera.toml"
+sed -i "/^\[traps.mytrap\]/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/my-drosera-trap/drosera.toml"
 
 #run
 retry_second_drosera_apply
