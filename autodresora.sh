@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# ANSI color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -31,6 +30,30 @@ check_error() {
         print_status "${RED}" "Error: $1"
         exit 1
     fi
+}
+
+retry_trap_deployment() {
+    local max_attempts=3
+    local attempt=1
+    local delay=10  # Delay in seconds between attempts
+
+    while [ $attempt -le $max_attempts ]; do
+        print_status "${YELLOW}" "Attempt $attempt of $max_attempts: Deploying trap..."
+        echo "ofc" | DROSERA_PRIVATE_KEY=$KEYY drosera apply
+        if [ $? -eq 0 ]; then
+            print_status "${GREEN}" "Trap deployment successful!"
+            return 0
+        else
+            print_status "${RED}" "Trap deployment failed on attempt $attempt."
+            if [ $attempt -eq $max_attempts ]; then
+                print_status "${RED}" "Error: Trap deployment failed after $max_attempts attempts."
+                exit 1
+            fi
+            print_status "${YELLOW}" "Retrying in $delay seconds..."
+            sleep $delay
+            ((attempt++))
+        fi
+    done
 }
 
 print_status "${BLUE}" "====================================="
@@ -163,8 +186,7 @@ check_error "Trap compilation failed"
 
 print_status "${YELLOW}" "Deploying trap..."
 read -p "Enter Private Key: " KEYY
-DROSERA_PRIVATE_KEY=$KEYY drosera apply
-check_error "Trap deployment failed"
+retry_trap_deployment
 
 print_status "${YELLOW}" "Please deposit or send Bloom Boost ETH on Holesky at https://app.drosera.io"
 read -p "Press ENTER to continue after deposit: "
