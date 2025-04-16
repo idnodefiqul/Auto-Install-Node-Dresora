@@ -224,7 +224,7 @@ print_status "${YELLOW}" "Setting up operator..."
 read -p "Enter Operator ETH Wallet Address: " OP_ETH
 
 print_status "${YELLOW}" "Updating drosera.toml..."
-sed -i '/^private_trap = true$/d' "$HOME/my-drosera-trap/drosera.toml"
+sed -i '/^private = true$/d' "$HOME/my-drosera-trap/drosera.toml"
 sed -i '/^whitelist = \[.*\]$/d' "$HOME/my-drosera-trap/drosera.toml"
 
 sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$operator_address\"]" "$HOME/my-drosera-trap/drosera.toml"
