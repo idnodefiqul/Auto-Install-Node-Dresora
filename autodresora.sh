@@ -178,10 +178,11 @@ sed -i '/^whitelist = \[.*\]$/d' "$HOME/my-drosera-trap/drosera.toml"
 sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/my-drosera-trap/drosera.toml"
 
 #run
-read -p "Masukan Private Key lagi: " $KEYY2
+read -p "Masukan Private Key lagi: " KEYY2
 DROSERA_PRIVATE_KEY=$KEYY2 drosera apply
 
 print_status "${YELLOW}" "Installing Operator CLI..."
+cd ~
 curl -LO https://github.com/drosera-network/releases/releases/download/v1.16.2/drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
 check_error "Failed to download Operator CLI"
 tar -xvf drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
