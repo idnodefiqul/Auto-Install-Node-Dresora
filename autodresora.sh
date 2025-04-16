@@ -32,55 +32,6 @@ check_error() {
     fi
 }
 
-retry_trap_deployment() {
-    local max_attempts=3
-    local attempt=1
-    local delay=10  # Delay in seconds between attempts
-
-    while [ $attempt -le $max_attempts ]; do
-        print_status "${YELLOW}" "Attempt $attempt of $max_attempts: Deploying trap..."
-        echo "ofc" | DROSERA_PRIVATE_KEY=$KEYY drosera apply
-        if [ $? -eq 0 ]; then
-            print_status "${GREEN}" "Trap deployment successful!"
-            return 0
-        else
-            print_status "${RED}" "Trap deployment failed on attempt $attempt."
-            if [ $attempt -eq $max_attempts ]; then
-                print_status "${RED}" "Error: Trap deployment failed after $max_attempts attempts."
-                exit 1
-            fi
-            print_status "${YELLOW}" "Retrying in $delay seconds..."
-            sleep $delay
-            ((attempt++))
-        fi
-    done
-}
-
-# Function to retry second drosera apply with auto 'ofc' input
-retry_second_drosera_apply() {
-    local max_attempts=5
-    local attempt=1
-    local delay=30  # Delay in seconds between attempts
-
-    while [ $attempt -le $max_attempts ]; do
-        print_status "${YELLOW}" "Attempt $attempt of $max_attempts: Applying Drosera configuration..."
-        echo "ofc" | DROSERA_PRIVATE_KEY=$KEYY drosera apply
-        if [ $? -eq 0 ]; then
-            print_status "${GREEN}" "Drosera configuration applied successfully!"
-            return 0
-        else
-            print_status "${RED}" "Drosera configuration failed on attempt $attempt."
-            if [ $attempt -eq $max_attempts ]; then
-                print_status "${RED}" "Error: Second drosera apply failed after $max_attempts attempts."
-                exit 1
-            fi
-            print_status "${YELLOW}" "Retrying in $delay seconds..."
-            sleep $delay
-            ((attempt++))
-        fi
-    done
-}
-
 print_status "${BLUE}" "====================================="
 print_status "${GREEN}" "Drosera Auto-Installer - Enhanced Edition"
 print_status "${BLUE}" "====================================="
@@ -227,7 +178,7 @@ sed -i '/^whitelist = \[.*\]$/d' "$HOME/my-drosera-trap/drosera.toml"
 sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/my-drosera-trap/drosera.toml"
 
 #run
-retry_second_drosera_apply
+DROSERA_PRIVATE_KEY=$KEYY drosera apply
 
 print_status "${YELLOW}" "Installing Operator CLI..."
 curl -LO https://github.com/drosera-network/releases/releases/download/v1.16.2/drosera-operator-v1.16.2-x86_64-unknown-linux-gnu.tar.gz
