@@ -68,15 +68,34 @@ print_status "${YELLOW}" "Installing Drosera..."
 curl -L https://app.drosera.io/install | bash
 check_error "Drosera installation failed"
 
-# Ensure .bashrc is properly sourced
-print_status "${YELLOW}" "Sourcing .bashrc..."
+# Ensure .bashrc is properly sourced and PATH is updated
+print_status "${YELLOW}" "Configuring PATH and sourcing .bashrc..."
 if [ -f /root/.bashrc ]; then
+    # Export PATH to include Drosera's binary directory
+    export PATH=$PATH:/root/.drosera/bin
+    echo 'export PATH=$PATH:/root/.drosera/bin' >> /root/.bashrc
     source /root/.bashrc
     echo "source /root/.bashrc" >> /root/.bash_profile
 else
     print_status "${RED}" "Warning: .bashrc not found, creating new one"
     touch /root/.bashrc
+    echo 'export PATH=$PATH:/root/.drosera/bin' >> /root/.bashrc
     source /root/.bashrc
+fi
+
+# Verify droseraup is available
+print_status "${YELLOW}" "Verifying droseraup availability..."
+if ! command -v droseraup &> /dev/null; then
+    print_status "${RED}" "Error: droseraup command not found. Attempting to locate..."
+    if [ -f /root/.drosera/bin/droseraup ]; then
+        print_status "${YELLOW}" "Found droseraup in /root/.drosera/bin. Adding to PATH..."
+        chmod +x /root/.drosera/bin/droseraup
+        export PATH=$PATH:/root/.drosera/bin
+        source /root/.bashrc
+    else
+        print_status "${RED}" "Error: Could not locate droseraup. Please check Drosera installation."
+        exit 1
+    fi
 fi
 
 # Run droseraup
@@ -89,8 +108,29 @@ print_status "${YELLOW}" "Installing Foundry..."
 curl -L https://foundry.paradigm.xyz | bash
 check_error "Foundry installation failed"
 
-# Source .bashrc again after Foundry
+# Update PATH for Foundry and source .bashrc
+print_status "${YELLOW}" "Configuring PATH for Foundry..."
+export PATH=$PATH:/root/.foundry/bin
+echo 'export PATH=$PATH:/root/.foundry/bin' >> /root/.bashrc
 source /root/.bashrc
+
+# Verify foundryup is available
+print_status "${YELLOW}" "Verifying foundryup availability..."
+if ! command -v foundryup &> /dev/null; then
+    print_status "${RED}" "Error: foundryup command not found. Attempting to locate..."
+    if [ -f /root/.foundry/bin/foundryup ]; then
+        print_status "${YELLOW}" "Found foundryup in /root/.foundry/bin. Adding to PATH..."
+        chmod +x /root/.foundry/bin/foundryup
+        export PATH=$PATH:/root/.foundry/bin
+        source /root/.bashrc
+    else
+        print_status "${RED}" "Error: Could not locate foundryup. Please check Foundry installation."
+        exit 1
+    fi
+fi
+
+# Run foundryup
+print_status "${YELLOW}" "Running foundryup..."
 foundryup
 check_error "foundryup failed"
 
@@ -98,6 +138,12 @@ check_error "foundryup failed"
 print_status "${YELLOW}" "Installing Bun..."
 curl -fsSL https://bun.sh/install | bash
 check_error "Bun installation failed"
+
+# Update PATH for Bun
+print_status "${YELLOW}" "Configuring PATH for Bun..."
+export PATH=$PATH:/root/.bun/bin
+echo 'export PATH=$PATH:/root/.bun/bin' >> /root/.bashrc
+source /root/.bashrc
 
 # Setup project directory
 print_status "${YELLOW}" "Setting up Drosera trap..."
