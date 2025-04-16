@@ -28,7 +28,7 @@ Ini akan membuka sesi screen baru di mana Anda dapat menjalankan skrip instalasi
 - 🔄 **Keluar dari sesi**: Tekan `Ctrl + A`, lalu `D` untuk keluar dan kembali ke terminal utama. Sesi akan tetap berjalan.
 - ↩️ **Kembali ke sesi**: Jalankan `screen -r dresora` untuk kembali ke sesi `dresora`.
 - 📜 **Daftar semua sesi screen**: Jalankan `screen -ls` untuk melihat semua sesi aktif.
-- ❌ **Keluar dari sesi**: Setelah selesai, ketik `exit` di dalam sesi screen untuk menutupnya.
+- ❌ **Keluar dari sesi**: Setelah selesai, tekan `CTRL +AD` di dalam sesi screen untuk menutupnya.
 
 Jika `screen` belum diinstal, Anda dapat menginstalnya dengan:
 ```bash
