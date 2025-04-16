@@ -211,10 +211,7 @@ check_error "Trap compilation failed"
 
 print_status "${YELLOW}" "Deploying trap..."
 read -p "Enter Private Key: " KEYY
-retry_trap_deployment
-
-print_status "${YELLOW}" "Please deposit or send Bloom Boost ETH on Holesky at https://app.drosera.io"
-read -p "Press ENTER to continue after deposit: "
+DROSERA_PRIVATE_KEY=$KEYY drosera apply
 
 print_status "${YELLOW}" "Running dryrun..."
 drosera dryrun
@@ -272,7 +269,7 @@ WantedBy=multi-user.target
 EOF
 check_error "Failed to create systemd service"
 
-print_status "${YELLOW}" "Tolong lakukan Opt-in Trap terlebih dahulu di https://app.drosera.io"
+print_status "${YELLOW}" "Tolong lakukan deposite ETH Holysky setelah deposit selesai , Lakukan Opt-in Trap terlebih dahulu di https://app.drosera.io"
 read -p "Setelah selesai Opt-in klik ENTER: "
 
 print_status "${YELLOW}" "Configuring firewall..."
