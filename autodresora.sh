@@ -164,9 +164,6 @@ print_status "${YELLOW}" "Deploying trap..."
 read -p "Enter Private Key: " KEYY
 DROSERA_PRIVATE_KEY=$KEYY drosera apply
 read -p "Tolong lakukan Deposit ETH Holysky di Send Blom Bost, kalau sudah melakukan deposite Tekan ENTER untuk melanjutkan: "
-print_status "${YELLOW}" "Running dryrun..."
-drosera dryrun
-check_error "Dryrun failed"
 
 print_status "${YELLOW}" "Setting up operator..."
 read -p "Enter Operator ETH Wallet Address: " OP_ETH
@@ -181,6 +178,9 @@ sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/
 cd ~
 cd my-drosera-trap
 read -p "Masukan Private Key lagi: " KEYY2
+print_status "${YELLOW}" "Running dryrun..."
+drosera dryrun
+check_error "Dryrun failed"
 DROSERA_PRIVATE_KEY=$KEYY2 drosera apply
 
 print_status "${YELLOW}" "Installing Operator CLI..."
