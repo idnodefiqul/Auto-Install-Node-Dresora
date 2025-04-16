@@ -239,7 +239,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable drosera
 sudo systemctl start drosera
 check_error "Failed to start Drosera service"
-
+rm -rf $HOME/autodresora.sh
 print_status "${GREEN}" "====================================="
 print_status "${GREEN}" "Installation Complete!"
 print_status "${GREEN}" "====================================="
