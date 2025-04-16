@@ -178,6 +178,7 @@ sed -i '/^whitelist = \[.*\]$/d' "$HOME/my-drosera-trap/drosera.toml"
 sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/my-drosera-trap/drosera.toml"
 
 #run
+cd my-drosera-trap
 read -p "Masukan Private Key lagi: " KEYY2
 DROSERA_PRIVATE_KEY=$KEYY2 drosera apply
 
