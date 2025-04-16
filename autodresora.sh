@@ -227,7 +227,7 @@ print_status "${YELLOW}" "Updating drosera.toml..."
 sed -i '/^private = true$/d' "$HOME/my-drosera-trap/drosera.toml"
 sed -i '/^whitelist = \[.*\]$/d' "$HOME/my-drosera-trap/drosera.toml"
 
-sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$operator_address\"]" "$HOME/my-drosera-trap/drosera.toml"
+sed -i "/^address = .*/a\private_trap = true\nwhitelist = [\"$OP_ETH\"]" "$HOME/my-drosera-trap/drosera.toml"
 
 #run
 retry_second_drosera_apply
