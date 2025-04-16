@@ -289,6 +289,9 @@ WantedBy=multi-user.target
 EOF
 check_error "Failed to create systemd service"
 
+print_status "${YELLOW}" "Tolong lakukan Opt-in Trap terlebih dahulu di https://app.drosera.io"
+read -p "Setelah selesai Opt-in klik ENTER: "
+
 print_status "${YELLOW}" "Configuring firewall..."
 sudo ufw allow ssh
 sudo ufw allow 22
