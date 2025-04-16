@@ -38,7 +38,7 @@ sudo apt install screen
 ### 3. Jalankan Skrip Auto-Installer 🛠️
 Di dalam sesi screen `dresora`, jalankan perintah berikut untuk mengunduh dan menjalankan skrip auto-installer langsung dari GitHub:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/idnodefiqul/Auto-Install-Node-Dresora/main/autodresora.sh | bash
+wget https://raw.githubusercontent.com/idnodefiqul/Auto-Install-Node-Dresora/main/autodresora.sh && bash autodresora.sh
 ```
 Perintah ini akan:
 - 📥 Mengunduh skrip `autodresora.sh` dari repositori.
